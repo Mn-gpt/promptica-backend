@@ -1,10 +1,6 @@
 from flask import Flask, request, jsonify
 import requests
 import os
-from flask_cors import CORS
-
-app = Flask(__name__)
-CORS(app)  # تفعيل CORS
 
 # استخدم نفس اسم المتغير المستخدم في Render
 API_KEY = os.environ.get("GEMINI_API_KEY")
