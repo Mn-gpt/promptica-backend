@@ -1,17 +1,24 @@
 from flask import Flask, request, jsonify
 import requests
 import os
+from flask_cors import CORS
 
 app = Flask(__name__)
-API_KEY = os.environ.get("GEMINI_API_KEY")  # سيأخذ المفتاح من البيئة الآمنة
+CORS(app)  # تفعيل CORS
+
+# استخدم نفس اسم المتغير المستخدم في Render
+API_KEY = os.environ.get("GEMINI_API_KEY")
 
 @app.route('/generate', methods=['POST'])
 def generate_content():
     data = request.json
     prompt = data.get('prompt')
     
-    # استدعاء Gemini API
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key={AIzaSyBzuARR_b09uXJIlfe7SB5U1ojKIsr2fy4}"
+    if not API_KEY:
+        return jsonify({"error": "API key not configured"}), 500
+    
+    # استدعاء Gemini API - استخدم المتغير API_KEY
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key={API_KEY}"
     headers = {'Content-Type': 'application/json'}
     payload = {
         "contents": [{
