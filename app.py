@@ -1,3 +1,19 @@
+# أضف هذه الدوال قبل تعريف المسارات
+@app.before_request
+def handle_preflight():
+    if request.method == "OPTIONS":
+        res = jsonify({})
+        res.headers['Access-Control-Allow-Origin'] = '*'
+        res.headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS'
+        res.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+        return res
+
+@app.after_request
+def add_cors_headers(response):
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS'
+    response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+    return response
 # حل مشكلة المسارات في Vercel
 import os
 import sys
