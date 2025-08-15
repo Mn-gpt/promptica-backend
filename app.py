@@ -1,10 +1,15 @@
 from flask import Flask, request, jsonify
 import requests
 import os
+import logging
 from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
+
+# إعداد سجلات التصحيح
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 API_KEY = os.environ.get('GEMINI_API_KEY')
 
@@ -19,13 +24,18 @@ def home():
 @app.route('/generate', methods=['POST'])
 def generate_content():
     try:
+        # تسجيل الطلب الوارد
+        logger.info("Received request: %s", request.json)
+        
         data = request.get_json()
         prompt = data.get('prompt')
         
         if not prompt:
+            logger.error("Missing 'prompt' in request")
             return jsonify({"error": "يجب تقديم 'prompt' في جسم الطلب"}), 400
             
         if not API_KEY:
+            logger.error("API_KEY is not set")
             return jsonify({"error": "لم يتم تكوين مفتاح API"}), 500
         
         # استدعاء Gemini API
@@ -37,15 +47,20 @@ def generate_content():
             }]
         }
         
+        logger.info("Sending request to Gemini API: %s", payload)
         response = requests.post(url, json=payload, headers=headers, timeout=30)
         response.raise_for_status()
+        
         gemini_response = response.json()
+        logger.info("Received response from Gemini: %s", gemini_response)
         
         return jsonify(gemini_response)
         
     except requests.exceptions.RequestException as e:
+        logger.error("Request to Gemini failed: %s", str(e))
         return jsonify({"error": f"خطأ في الاتصال بـ Gemini API: {str(e)}"}), 500
     except Exception as e:
+        logger.exception("Unexpected error occurred")
         return jsonify({"error": f"خطأ غير متوقع: {str(e)}"}), 500
 
 # هذا الكود ضروري لتشغيل الخادم محلياً
