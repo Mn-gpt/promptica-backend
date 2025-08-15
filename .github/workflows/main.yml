@@ -22,5 +22,5 @@ jobs:
         
       - name: Start server
         env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.AIzaSyCtOgxu4R5paudoGjfhEkOGRsHIItUtavg }}
         run: node server.js
