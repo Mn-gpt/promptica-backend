@@ -1,3 +1,7 @@
+# حل مشكلة المسارات في Vercel
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from flask import Flask, request, jsonify
 import requests
 import os
