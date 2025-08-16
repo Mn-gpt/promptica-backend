@@ -1,26 +1,24 @@
-name: Gemini API Server
+name: Run Flask Server
 
 on:
-  workflow_dispatch: # يسمح بتشغيل يدوي
-  push:
-    branches: [main] # تشغيل تلقائي عند تحديث main
+  workflow_dispatch:   # تشغيل يدوي من GitHub
 
 jobs:
   run-server:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
-          node-version: '20'
-          
+          python-version: "3.10"
+
       - name: Install dependencies
-        run: npm install express @google/generative-ai
-        
-      - name: Start server
-        env:
-          GEMINI_API_KEY: ${{ secrets.AIzaSyCtOgxu4R5paudoGjfhEkOGRsHIItUtavg }}
-        run: node server.js
+        run: pip install -r requirements.txt
+
+      - name: Run server
+        run: |
+          nohup python app.py &
+          sleep 21600  # 6 ساعات = 21600 ثانية
