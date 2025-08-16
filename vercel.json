@@ -1,4 +1,5 @@
 {
+  "version": 2,
   "builds": [
     {
       "src": "app.py",
@@ -7,12 +8,7 @@
   ],
   "routes": [
     {
-      "src": "/generate",
-      "methods": ["POST"],
-      "dest": "app.py"
-    },
-    {
-      "src": "/",
+      "src": "/api/chat",
       "dest": "app.py"
     }
   ]
