@@ -1,4 +1,5 @@
 flask
+pyngrok
 requests
 gunicorn
 flask_cors
